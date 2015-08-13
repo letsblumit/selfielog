@@ -1,72 +1,78 @@
 <!doctype html>
 <html lang="en">
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Selfielog</title>
-  <meta name="description" content="Articles curated from a variety of categories.">
-  <meta name="keywords" content="selfie, groupie, time log, log">
-  <meta name="author" content="LetsBlumIt Corp.">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Selfielog</title>
+<meta name="description" content="Articles curated from a variety of categories.">
+<meta name="keywords" content="selfie, groupie, time log, log">
+<meta name="author" content="LetsBlumIt Corp.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/normalize/3.0.2/normalize.min.css">
-  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300">
-  <link rel="stylesheet" href="/style.css?ver=0.2.0">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/normalize/3.0.2/normalize.min.css">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300">
+<link rel="stylesheet" href="./style.css?ver=0.2.0">
 
-  <section id="timelogs">
-    <header>
-      <img class="banner" src="selfie.png">
-      <h1>Selfie<span>Log</span></h1>
+<section id="timelogs">
+  <header>
+    <img class="banner" src="selfie.png">
+    <h1>Selfie<span>Log</span></h1>
 
-      <form>
-        <input id="picker">
-        <br>
-        <br>
-        <button id="newtimelog">Take a Selfie</button>
-      </form>
-    </header>
+    <form>
+      <input id="picker">
+      <br>
+      <br>
+      <button id="newtimelog">Take a Selfie</button>
+    </form>
+  </header>
 
-    <ul id="timeloglist"></ul>
+  <div><canvas class="camera" id="sender" style="display: none"></canvas></div>
+  <ul id="timeloglist"></ul>
 
-    <footer>
-      <hr>
-      <div id="endlog"></div>
-    </footer>
-  </section>
+  <footer>
+    <hr>
+    <div id="endlog"></div>
+  </footer>
+</section>
 
-  <section id="newlogmodal">
-    <div class="mcselfie">
-      <div class="selfie">
-        <img class="camera" id="preview">
-        <div class="camera" id="webcam"></div>
+<section id="newlogmodal">
+  <div class="mcselfie">
+    <div class="selfie">
+      <img class="camera" id="preview">
+      <div class="camera" id="webcam">
+        <video class="camera" id="webc" autoplay
+               style="width: 640px; height: 480px; transform-origin: 0px 0px 0px; transform: scaleX(0.5) scaleY(0.5);"></video>
       </div>
 
-      <button id="snapit">Snap It</button>
-      <button id="logit">Log It</button>
-      <button id="cancel">Cancel</button>
-      <br>
-      <label id="upload"></label>
     </div>
-  </section>
 
-  <script src="/vendor/datepickr.min.js"></script>
-  <script src="/vendor/gifshot.min.js"></script>
-  <script src="http://cdn.binaryjs.com/0/binary.js"></script>
-  <script src="/script.js?ver=0.2.0"></script>
+    <button id="snapit">Snap It</button>
+    <button id="logit">Log It</button>
+    <button id="cancel">Cancel</button>
+    <br>
+    <label id="upload"></label>
+  </div>
+</section>
 
-  <script>
-    (function (i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r;
-      i[r] = i[r] || function () {
+<script src="./vendor/datepickr.min.js"></script>
+<script src="./vendor/binary.js"></script>
+<script src="./vendor/main.js"></script>
+<script src="./vendor/gifshot.min.js"></script>
+<script src="./script.js?ver=0.2.0"></script>
 
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date();
-      a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0];
-      a.async = 1;
-      a.src = g;
-      m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-    ga('create', 'UA-XXXXXXXX-XX', 'auto');
-    ga('require', 'displayfeatures');
-    ga('send', 'pageview');
-  </script>
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+
+              (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-XXXXXXXX-XX', 'auto');
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
+</script>

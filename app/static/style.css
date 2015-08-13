@@ -126,13 +126,6 @@ li:nth-child(even) .selfie {
   display: none;
 }
 
-video {
-  width: 640px;
-  height: 480px;
-  transform-origin: 0px 0px 0px;
-  transform: scaleX(0.5) scaleY(0.5);
-}
-
 #preview {
   visibility: hidden;
   z-index: 5;
@@ -303,4 +296,15 @@ video {
     display: none;
   }
 }
+
+#canvas{
+  border:1px solid green;
+  background: #ccc;
+  text-align: center;
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  -webkit-transform: translate3d(200px,50px,50px);
+  margin-left:400px;
+}
+
 
