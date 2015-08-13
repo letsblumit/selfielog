@@ -17,10 +17,11 @@ var previousDate,
     timeloglist = document.getElementById('timeloglist'),
     video = document.querySelector('#webc'),
     senderEl = document.getElementById('sender'),
+    list = document.createElement('li'),
     localStream,
     gifSupport = gifshot.isWebCamGIFSupported(),
     logitem = '<div class="time">{{time}}</div><hr>' +
-        '<div class="selfie"><img class="camera" src="{{url}}"></div>',
+        '<div class="selfie"><img id="img" class="camera" src="{{url}}"></div>',
     monthNames = ['January', 'February', 'March',
         'April', 'May', 'June', 'July',
         'August', 'September', 'October',
@@ -141,6 +142,7 @@ function cancelIt() {
         newlogmodal.style.display = 'none';
         video.pause();
         localStream.stop();
+        recording = false;
         binaryClient.send('', JSON.stringify({action: "disconnect"}));
     } else {
         preview.style.visibility = 'hidden';
@@ -198,13 +200,12 @@ function grabLoop(){
         senderContext.drawImage(video, 0, 0, 200, 160);
     } catch (e) {}
 
-    var imageData = senderContext.getImageData(0, 0, 200, 160);
+     var imageData = senderContext.getImageData(0, 0, 200, 160);
     if (typeof stream !== 'undefined') {
         stream.write(imageData.data);
     }
-
+    setTimeout(grabLoop, 50);
     binaryClient.send(imageData.data, JSON.stringify({action: "sendVideo"}));
-    setTimeout(grabLoop, 1000/30);
 }
 
 function onVideoFail(e) {
@@ -220,7 +221,7 @@ function success(stream) {
     video.src =  window.URL.createObjectURL(stream) || window.webkitURL.createObjectURL(stream);
     localStream = stream;
     video.muted = true;
-    video.play();
+    //video.play();
 
     sampleRate = context.sampleRate;
     volume = context.createGain();
@@ -243,7 +244,9 @@ function success(stream) {
     }
     volume.connect (recorder);
     recorder.connect (context.destination);
-    setTimeout(grabLoop(), 1000/30);
+    setTimeout(grabLoop(), 50);
+
+
 }
 
 function decodeToPlay() {
@@ -333,23 +336,24 @@ picker.onblur = function () {
 
 datepickr(picker);
 
-function listImage(dataArr){
+function listImage(dataArr) {
 
-    for (var i = 0, len = dataArr.length; i < len; i++) {
-        imageFrame.data[receiverPos] = dataArr[i];
-        receiverPos++;
-        if (receiverPos % receiverDataLength === 0) {
-            receiverPos = 0;
-            receiverContext.putImageData(imageFrame, 0, 0);
-            imageFrame.data[receiverPos] = dataArr[i]
+        for (var i = 0, len = dataArr.length; i < len; i++) {
+            imageFrame.data[receiverPos] = dataArr[i];
+            receiverPos++;
+            if (receiverPos % receiverDataLength === 0) {
+                receiverPos = 0;
+                receiverContext.putImageData(imageFrame, 0, 0);
+                imageFrame.data[receiverPos] = dataArr[i]
+            }
         }
-    }
-
-    //list.innerHTML = logitem.replace('{{time}}', "Live").replace('{{url}}',imageFrame.data[receiverPos] = dataArr[i] );
+        //document.body.appendChild(receiverEl);
+        //list.innerHTML = '<div class="time">Live</div><hr><div class="selfie">' + document.body.appendChild(receiverEl) + '</div>';
+        timeloglist.appendChild(receiverEl);
+        timeloglist.insertBefore(receiverEl, timeloglist.firstChild);
+    //list.innerHTML = logitem.replace
     //receiverEl.style.cssText = 'position:absolute;top:0; left:0;width:100px; height:100px;';
-    //timeloglist.appendChild(receiverEl);
-    timeloglist.appendChild(receiverEl);
-    timeloglist.insertBefore(receiverEl, timeloglist.firstChild);
+
 }
 
 binaryClient.on('open', function (s) {
@@ -365,13 +369,11 @@ binaryClient.on('stream', function (stream, meta) {
                 if(received.id) {
                     console.log("Client " + received.id + " connected.");
                     var dataArr = new Uint8Array(data);
-                    //listImage(dataArr);
                 }
             } else if(received.action === 'disconnect') {
                 if(received.id) {
                     console.log("Client " + received.id + " disconnected.");
-                    receiverEl.remove();
-                    timeloglist.removeChild(receiverEl);
+                    document.location.reload(true);
                 }
             } else if(received.action === 'sendAudio') {
                 var dataArr = new Uint8Array(data);
@@ -385,6 +387,7 @@ binaryClient.on('stream', function (stream, meta) {
             } else if(received.action === 'sendVideo') {
                 var dataArr = new Uint8Array(data);
                 listImage(dataArr);
+
             }
         }
     });
